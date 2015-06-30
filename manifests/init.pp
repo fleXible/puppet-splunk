@@ -360,7 +360,7 @@ class splunk (
     }
 
     exec { 'splunk_get_package':
-      command => "wget \'${splunk::install_source}' -O ${splunk::basedir}/${package_provider}/${package_filename}",
+      command => "/usr/bin/wget \'${splunk::install_source}' -O ${splunk::basedir}/${package_provider}/${package_filename}",
       creates => "${splunk::basedir}/${package_provider}/${package_filename}",
       before  => Package['splunk'],
     }
