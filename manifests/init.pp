@@ -397,7 +397,7 @@ class splunk (
   exec { 'splunk_first_time_run':
     command   => "${splunk::basedir}/bin/splunk --accept-license enable boot-start --answer-yes --no-prompt",
     require   => Package['splunk'],
-    onlyif    => "test -f ${splunk::basedir}/ftr",
+    onlyif    => "/usr/bin/test -f ${splunk::basedir}/ftr",
   }
 
   # Setting of forward_server for forwarders
@@ -462,7 +462,7 @@ class splunk (
   }
 
   file { 'splunk_change_admin_password':
-    ensure  => present,
+    ensure  => $splunk::manage_package,
     path    => "${splunk::basedir}/bin/puppet_change_admin_password",
     mode    => '0700',
     owner   => $splunk::config_file_owner,
