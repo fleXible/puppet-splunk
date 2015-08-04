@@ -462,7 +462,7 @@ class splunk (
   }
 
   file { 'splunk_change_admin_password':
-    ensure  => $splunk::manage_package,
+    ensure  => present,
     path    => "${splunk::basedir}/bin/puppet_change_admin_password",
     mode    => '0700',
     owner   => $splunk::config_file_owner,
