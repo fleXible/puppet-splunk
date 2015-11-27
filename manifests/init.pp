@@ -345,7 +345,7 @@ class splunk (
       }
     }
 
-    file { $splunk::basedir, "$splunk::basedir/bin":
+    file { $splunk::basedir:
       ensure => 'directory',
     }
 
@@ -423,7 +423,7 @@ class splunk (
   # Setting of deployment server
   if $splunk::deployment_server {
     file { 'splunk_deployment_server' :
-      ensure  => $splunk::manage_file,
+      ensure  => present,
       path    => "${splunk::basedir}/etc/system/local/deploymentclient.conf",
       mode    => '0700',
       owner   => $splunk::config_file_owner,
