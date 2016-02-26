@@ -352,7 +352,7 @@ class splunk (
     }
 
     file { "${splunk::basedir}/${package_provider}":
-      ensure => 'directory',
+      ensure => $manage_file,
       owner  => 'root',
       group  => 'root',
       mode   => '0755',
@@ -360,7 +360,7 @@ class splunk (
     }
 
     exec { 'splunk_get_package':
-      command => "wget \'${splunk::install_source}' -O ${splunk::basedir}/${package_provider}/${package_filename}",
+      command => "/usr/bin/wget \'${splunk::install_source}' -O ${splunk::basedir}/${package_provider}/${package_filename}",
       creates => "${splunk::basedir}/${package_provider}/${package_filename}",
       before  => Package['splunk'],
     }
@@ -427,7 +427,7 @@ class splunk (
     file { 'splunk_deployment_server' :
       ensure  => $splunk::manage_file,
       path    => "${splunk::basedir}/etc/system/local/deploymentclient.conf",
-      mode    => '0700',
+      mode    => $splunk::config_file_mode,
       owner   => $splunk::config_file_owner,
       group   => $splunk::config_file_group,
       content => template('splunk/deploymentclient.erb'),
@@ -558,9 +558,9 @@ class splunk (
     }
 
     file { 'splunk_license':
-      ensure => present,
+      ensure => $splunk::manage_file,
       path   => '/root/splunk.license',
-      mode   => '0755',
+      mode   => '0750',
       owner  => 'root',
       group  => 'root',
       source => $license_file_source,
