@@ -294,6 +294,17 @@ class splunk (
     default => 'present',
   }
 
+  $manage_directory = $splunk::bool_absent ? {
+    true    => 'absent',
+    default => 'directory',
+  }
+
+  if ($splunk::deployment_server and ! $splunk::bool_absent) {
+    $manage_deployment_file = 'present'
+  } else {
+    $manage_deployment_file = 'absent'
+  }
+
   # If $splunk::disable == true we dont check splunk on the local system
   if $splunk::bool_absent == true or $splunk::bool_disable == true or $splunk::bool_disableboot == true {
     $manage_monitor = false
@@ -346,15 +357,15 @@ class splunk (
     }
 
     file { [ $splunk::basedir, "${splunk::basedir}/bin"]:
-      ensure => 'directory',
+      ensure => $splunk::manage_directory,
       owner  => $splunk::config_file_owner,
       group  => $splunk::config_file_group,
     }
 
     file { "${splunk::basedir}/${package_provider}":
-      ensure => $manage_file,
-      owner  => 'root',
-      group  => 'root',
+      ensure => $splunk::manage_file,
+      owner  => $splunk::config_file_owner,
+      group  => $splunk::config_file_group,
       mode   => '0755',
       before => Exec['splunk_get_package'],
     }
@@ -423,17 +434,15 @@ class splunk (
   }
 
   # Setting of deployment server
-  if $splunk::deployment_server {
-    file { 'splunk_deployment_server' :
-      ensure  => $splunk::manage_file,
-      path    => "${splunk::basedir}/etc/system/local/deploymentclient.conf",
-      mode    => $splunk::config_file_mode,
-      owner   => $splunk::config_file_owner,
-      group   => $splunk::config_file_group,
-      content => template('splunk/deploymentclient.erb'),
-      require => Package['splunk'],
-      notify  => Service['splunk'],
-    }
+  file { 'splunk_deployment_server' :
+    ensure  => $splunk::manage_deployment_file,
+    path    => "${splunk::basedir}/etc/system/local/deploymentclient.conf",
+    mode    => $splunk::config_file_mode,
+    owner   => $splunk::config_file_owner,
+    group   => $splunk::config_file_group,
+    content => template('splunk/deploymentclient.erb'),
+    require => Package['splunk'],
+    notify  => Service['splunk'],
   }
 
   # Setting of files or directories to be monitored
@@ -538,10 +547,10 @@ class splunk (
   # The whole local splunk configuration directory can be recursively overriden
   if $splunk::source_dir {
     file { 'splunk.dir':
-      ensure  => directory,
+      ensure  => $splunk::manage_directory,
       path    => $splunk::config_dir,
       require => Package['splunk'],
-      source  => $source_dir,
+      source  => $splunk::source_dir,
       recurse => true,
       purge   => $splunk::bool_source_dir_purge,
       replace => $splunk::manage_file_replace,
@@ -563,11 +572,10 @@ class splunk (
       mode   => '0750',
       owner  => 'root',
       group  => 'root',
-      source => $license_file_source,
+      source => $splunk::license_file_source,
       before => Service['splunk'] ,
       notify => Exec['splunk_add_license'],
     }
-
   }
 
   ### Include custom class if $my_class is set
