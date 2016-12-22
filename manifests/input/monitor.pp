@@ -24,11 +24,11 @@ define splunk::input::monitor ( $path,
   if ! defined(Concat['inputs.conf']) {
     concat { 'inputs.conf':
       path   => "${splunk::basedir}/etc/system/local/inputs.conf",
-      notify => Service['splunk']
+      notify => Service['splunk'],
     }
   }
   concat::fragment { "monitor-${title}":
     target  => 'inputs.conf',
-    content => template( 'splunk/input/monitor.erb' )
+    content => template( 'splunk/input/monitor.erb' ),
   }
 }

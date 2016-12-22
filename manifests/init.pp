@@ -195,75 +195,75 @@
 #
 class splunk (
   $license_file_source = params_lookup('license_file_source'),
-  $install            = params_lookup('install'),
-  $install_source     = params_lookup('install_source'),
-  $admin_password     = params_lookup('admin_password'),
-  $forward_server     = params_lookup('forward_server'),
-  $deployment_server  = params_lookup('deployment_server'),
-  $monitor_path       = params_lookup('monitor_path'),
-  $monitor_sourcetype = params_lookup('monitor_sourcetype'),
-  $template_inputs    = params_lookup('template_inputs'),
-  $template_outputs   = params_lookup('template_outputs'),
-  $template_server    = params_lookup('template_server'),
-  $template_web       = params_lookup('template_web'),
-  $my_class           = params_lookup('my_class'),
-  $source_dir         = params_lookup('source_dir'),
-  $source_dir_purge   = params_lookup('source_dir_purge'),
-  $options            = params_lookup('options'),
-  $absent             = params_lookup('absent'),
-  $disable            = params_lookup('disable'),
-  $disableboot        = params_lookup('disableboot'),
-  $monitor            = params_lookup( 'monitor' , 'global' ),
-  $monitor_tool       = params_lookup( 'monitor_tool' , 'global' ),
-  $monitor_target     = params_lookup( 'monitor_target' , 'global' ),
-  $puppi              = params_lookup( 'puppi' , 'global' ),
-  $puppi_helper       = params_lookup( 'puppi_helper' , 'global' ),
-  $firewall           = params_lookup( 'firewall' , 'global' ),
-  $firewall_tool      = params_lookup( 'firewall_tool' , 'global' ),
-  $firewall_src       = params_lookup( 'firewall_src' , 'global' ),
-  $firewall_dst       = params_lookup( 'firewall_dst' , 'global' ),
-  $debug              = params_lookup( 'debug' , 'global' ),
-  $audit_only         = params_lookup( 'audit_only' , 'global' ),
-  $port               = params_lookup('port'),
-  $protocol           = params_lookup('protocol'),
-  $version            = params_lookup('version')
+  $install             = params_lookup('install'),
+  $install_source      = params_lookup('install_source'),
+  $admin_password      = params_lookup('admin_password'),
+  $forward_server      = params_lookup('forward_server'),
+  $deployment_server   = params_lookup('deployment_server'),
+  $monitor_path        = params_lookup('monitor_path'),
+  $monitor_sourcetype  = params_lookup('monitor_sourcetype'),
+  $template_inputs     = params_lookup('template_inputs'),
+  $template_outputs    = params_lookup('template_outputs'),
+  $template_server     = params_lookup('template_server'),
+  $template_web        = params_lookup('template_web'),
+  $my_class            = params_lookup('my_class'),
+  $source_dir          = params_lookup('source_dir'),
+  $source_dir_purge    = params_lookup('source_dir_purge'),
+  $options             = params_lookup('options'),
+  $absent              = params_lookup('absent'),
+  $disable             = params_lookup('disable'),
+  $disableboot         = params_lookup('disableboot'),
+  $monitor             = params_lookup( 'monitor' , 'global' ),
+  $monitor_tool        = params_lookup( 'monitor_tool' , 'global' ),
+  $monitor_target      = params_lookup( 'monitor_target' , 'global' ),
+  $puppi               = params_lookup( 'puppi' , 'global' ),
+  $puppi_helper        = params_lookup( 'puppi_helper' , 'global' ),
+  $firewall            = params_lookup( 'firewall' , 'global' ),
+  $firewall_tool       = params_lookup( 'firewall_tool' , 'global' ),
+  $firewall_src        = params_lookup( 'firewall_src' , 'global' ),
+  $firewall_dst        = params_lookup( 'firewall_dst' , 'global' ),
+  $debug               = params_lookup( 'debug' , 'global' ),
+  $audit_only          = params_lookup( 'audit_only' , 'global' ),
+  $port                = params_lookup('port'),
+  $protocol            = params_lookup('protocol'),
+  $version             = params_lookup('version')
   ) inherits splunk::params {
 
   # Module's internal variables
   $basename = $splunk::install ? {
-    server    => 'splunk',
-    forwarder => 'splunkforwarder',
+    'server'    => 'splunk',
+    'forwarder' => 'splunkforwarder',
   }
 
   $basedir = $splunk::install ? {
-    server    => '/opt/splunk',
-    forwarder => '/opt/splunkforwarder',
+    'server'    => '/opt/splunk',
+    'forwarder' => '/opt/splunkforwarder',
   }
 
-  $package = $splunk::basename
-  $service = 'splunk'
-  $service_status = true
-  $process = 'splunkd'
-  $process_args = ''
-  $config_dir = "${splunk::basedir}/etc/"
-  $config_file_mode = '0644'
+  $package           = $splunk::basename
+  $service           = 'splunk'
+  $service_status    = true
+  $process           = 'splunkd'
+  $process_args      = ''
+  $config_dir        = "${splunk::basedir}/etc/"
+  $config_file_mode  = '0644'
   $config_file_owner = 'root'
   $config_file_group = 'root'
-  $pid_file = "${splunk::basedir}/var/run/splunk/splunkd.pid"
-  $data_dir = "${splunk::basedir}/var/lib/splunk"
-  $log_dir = "${splunk::basedir}/var/log/splunk"
-  $log_file = "${splunk::basedir}/var/log/splunk/splunkd.log"
+  $pid_file          = "${splunk::basedir}/var/run/splunk/splunkd.pid"
+  $data_dir          = "${splunk::basedir}/var/lib/splunk"
+  $log_dir           = "${splunk::basedir}/var/log/splunk"
+  $log_file          = "${splunk::basedir}/var/log/splunk/splunkd.log"
 
   ### Definition of some variables used in the module
-  $bool_absent=any2bool($absent)
-  $bool_disable=any2bool($disable)
-  $bool_disableboot=any2bool($disableboot)
-  $bool_puppi=any2bool($puppi)
-  $bool_monitor=any2bool($monitor)
-  $bool_firewall=any2bool($firewall)
-  $bool_audit_only=any2bool($audit_only)
-  $bool_source_dir_purge=any2bool($source_dir_purge)
-  $bool_debug=any2bool($debug)
+  $bool_absent           = any2bool($absent)
+  $bool_disable          = any2bool($disable)
+  $bool_disableboot      = any2bool($disableboot)
+  $bool_puppi            = any2bool($puppi)
+  $bool_monitor          = any2bool($monitor)
+  $bool_firewall         = any2bool($firewall)
+  $bool_audit_only       = any2bool($audit_only)
+  $bool_source_dir_purge = any2bool($source_dir_purge)
+  $bool_debug            = any2bool($debug)
 
   $manage_package = $splunk::bool_absent ? {
     true  => 'absent',
@@ -408,9 +408,9 @@ class splunk (
   # service again, accept the license and run any migration scripts that are
   # needed all in one shot.
   exec { 'splunk_first_time_run':
-    command   => "${splunk::basedir}/bin/splunk --accept-license enable boot-start --answer-yes --no-prompt",
-    require   => Package['splunk'],
-    onlyif    => "/usr/bin/test -f ${splunk::basedir}/ftr",
+    command => "${splunk::basedir}/bin/splunk --accept-license enable boot-start --answer-yes --no-prompt",
+    require => Package['splunk'],
+    onlyif  => "/usr/bin/test -f ${splunk::basedir}/ftr",
   }
 
   # Setting of forward_server for forwarders

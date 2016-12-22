@@ -21,11 +21,11 @@ define splunk::input::tcp ( $port,
   if ! defined(Concat['inputs.conf']) {
     concat { 'inputs.conf':
       path   => "${splunk::basedir}/etc/system/local/inputs.conf",
-      notify => Service['splunk']
+      notify => Service['splunk'],
     }
   }
   concat::fragment { "tcp-${title}":
     target  => 'inputs.conf',
-    content => template( 'splunk/input/tcp.erb' )
+    content => template( 'splunk/input/tcp.erb' ),
   }
 }
