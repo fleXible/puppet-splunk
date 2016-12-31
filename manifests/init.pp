@@ -22,6 +22,12 @@
 #   packages via your default provider (apt, yum...) so you should
 #   have them in a custom repo
 #
+# [*user*]
+#   User that owns and runs the Splunk processes, files and directories
+#
+# [*group*]
+#   Group that owns and runs the Splunk processes, files and directories
+#
 # [*admin_password*]
 #   Splunk admin password both for the forwarder management and the splunk web
 #   interface. Default is "changeme"
@@ -198,6 +204,8 @@ class splunk (
   $license_file_source = params_lookup('license_file_source'),
   $install             = params_lookup('install'),
   $install_source      = params_lookup('install_source'),
+  $user                = params_lookup('user'),
+  $group               = params_lookup('group'),
   $admin_password      = params_lookup('admin_password'),
   $forward_server      = params_lookup('forward_server'),
   $deployment_server   = params_lookup('deployment_server'),
@@ -248,8 +256,8 @@ class splunk (
   $process_args      = ''
   $config_dir        = "${splunk::basedir}/etc/"
   $config_file_mode  = '0644'
-  $config_file_owner = 'root'
-  $config_file_group = 'root'
+  $config_file_owner = $splunk::user
+  $config_file_group = $splunk::group
   $pid_file          = "${splunk::basedir}/var/run/splunk/splunkd.pid"
   $data_dir          = "${splunk::basedir}/var/lib/splunk"
   $log_dir           = "${splunk::basedir}/var/log/splunk"
