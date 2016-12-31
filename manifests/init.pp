@@ -179,7 +179,8 @@
 # [*version*]
 #   The splunk package full version to install
 #   This allows for package upgrade/downgrade based on version
-#   Example "6.2.1-245427"
+#   Defaults to "latest"
+#   Example "6.2.1-245427", "installed"
 #
 # == Examples
 #
@@ -195,38 +196,38 @@
 #
 class splunk (
   $license_file_source = params_lookup('license_file_source'),
-  $install            = params_lookup('install'),
-  $install_source     = params_lookup('install_source'),
-  $admin_password     = params_lookup('admin_password'),
-  $forward_server     = params_lookup('forward_server'),
-  $deployment_server  = params_lookup('deployment_server'),
-  $monitor_path       = params_lookup('monitor_path'),
-  $monitor_sourcetype = params_lookup('monitor_sourcetype'),
-  $template_inputs    = params_lookup('template_inputs'),
-  $template_outputs   = params_lookup('template_outputs'),
-  $template_server    = params_lookup('template_server'),
-  $template_web       = params_lookup('template_web'),
-  $my_class           = params_lookup('my_class'),
-  $source_dir         = params_lookup('source_dir'),
-  $source_dir_purge   = params_lookup('source_dir_purge'),
-  $options            = params_lookup('options'),
-  $absent             = params_lookup('absent'),
-  $disable            = params_lookup('disable'),
-  $disableboot        = params_lookup('disableboot'),
-  $monitor            = params_lookup( 'monitor' , 'global' ),
-  $monitor_tool       = params_lookup( 'monitor_tool' , 'global' ),
-  $monitor_target     = params_lookup( 'monitor_target' , 'global' ),
-  $puppi              = params_lookup( 'puppi' , 'global' ),
-  $puppi_helper       = params_lookup( 'puppi_helper' , 'global' ),
-  $firewall           = params_lookup( 'firewall' , 'global' ),
-  $firewall_tool      = params_lookup( 'firewall_tool' , 'global' ),
-  $firewall_src       = params_lookup( 'firewall_src' , 'global' ),
-  $firewall_dst       = params_lookup( 'firewall_dst' , 'global' ),
-  $debug              = params_lookup( 'debug' , 'global' ),
-  $audit_only         = params_lookup( 'audit_only' , 'global' ),
-  $port               = params_lookup('port'),
-  $protocol           = params_lookup('protocol'),
-  $version            = params_lookup('version')
+  $install             = params_lookup('install'),
+  $install_source      = params_lookup('install_source'),
+  $admin_password      = params_lookup('admin_password'),
+  $forward_server      = params_lookup('forward_server'),
+  $deployment_server   = params_lookup('deployment_server'),
+  $monitor_path        = params_lookup('monitor_path'),
+  $monitor_sourcetype  = params_lookup('monitor_sourcetype'),
+  $template_inputs     = params_lookup('template_inputs'),
+  $template_outputs    = params_lookup('template_outputs'),
+  $template_server     = params_lookup('template_server'),
+  $template_web        = params_lookup('template_web'),
+  $my_class            = params_lookup('my_class'),
+  $source_dir          = params_lookup('source_dir'),
+  $source_dir_purge    = params_lookup('source_dir_purge'),
+  $options             = params_lookup('options'),
+  $absent              = params_lookup('absent'),
+  $disable             = params_lookup('disable'),
+  $disableboot         = params_lookup('disableboot'),
+  $monitor             = params_lookup( 'monitor' , 'global' ),
+  $monitor_tool        = params_lookup( 'monitor_tool' , 'global' ),
+  $monitor_target      = params_lookup( 'monitor_target' , 'global' ),
+  $puppi               = params_lookup( 'puppi' , 'global' ),
+  $puppi_helper        = params_lookup( 'puppi_helper' , 'global' ),
+  $firewall            = params_lookup( 'firewall' , 'global' ),
+  $firewall_tool       = params_lookup( 'firewall_tool' , 'global' ),
+  $firewall_src        = params_lookup( 'firewall_src' , 'global' ),
+  $firewall_dst        = params_lookup( 'firewall_dst' , 'global' ),
+  $debug               = params_lookup( 'debug' , 'global' ),
+  $audit_only          = params_lookup( 'audit_only' , 'global' ),
+  $port                = params_lookup('port'),
+  $protocol            = params_lookup('protocol'),
+  $version             = params_lookup('version')
   ) inherits splunk::params {
 
   # Module's internal variables
@@ -267,7 +268,7 @@ class splunk (
 
   $manage_package = $splunk::bool_absent ? {
     true  => 'absent',
-    false => 'latest',
+    false => $splunk::version,
   }
 
   $manage_service_enable = $splunk::bool_disableboot ? {
@@ -348,7 +349,7 @@ class splunk (
         $package_provider = 'dpkg'
       }
       /(?i:RedHat|Centos|Scientific|Suse|OracleLinux|Amazon)/: {
-        $package_filename = 'puppet-splunk.rpm'
+        $package_filename = "puppet-splunk-${splunk::version}.rpm"
         $package_provider = 'rpm'
       }
       default: {
