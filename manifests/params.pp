@@ -42,7 +42,7 @@ class splunk::params {
 
   $protocol = 'tcp'
 
-  $version = ''
+  $version = 'latest'
 
   ### General variables that affect module's behaviour
   # They can be set at top scope level or in a ENC

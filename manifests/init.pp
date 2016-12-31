@@ -179,7 +179,8 @@
 # [*version*]
 #   The splunk package full version to install
 #   This allows for package upgrade/downgrade based on version
-#   Example "6.2.1-245427"
+#   Defaults to "latest"
+#   Example "6.2.1-245427", "installed"
 #
 # == Examples
 #
@@ -267,7 +268,7 @@ class splunk (
 
   $manage_package = $splunk::bool_absent ? {
     true  => 'absent',
-    false => 'latest',
+    false => $splunk::version,
   }
 
   $manage_service_enable = $splunk::bool_disableboot ? {
@@ -348,7 +349,7 @@ class splunk (
         $package_provider = 'dpkg'
       }
       /(?i:RedHat|Centos|Scientific|Suse|OracleLinux|Amazon)/: {
-        $package_filename = 'puppet-splunk.rpm'
+        $package_filename = "puppet-splunk-${splunk::version}.rpm"
         $package_provider = 'rpm'
       }
       default: {
