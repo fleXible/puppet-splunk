@@ -21,6 +21,10 @@ class splunk::params {
 
   $install_source = ''
 
+  $user = 'root'
+
+  $group = 'root'
+
   $admin_password = 'changeme'
 
   $forward_server = ''
