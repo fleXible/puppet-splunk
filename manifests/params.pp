@@ -21,6 +21,10 @@ class splunk::params {
 
   $install_source = ''
 
+  $user = 'root'
+
+  $group = 'root'
+
   $admin_password = 'changeme'
 
   $forward_server = ''
@@ -42,7 +46,7 @@ class splunk::params {
 
   $protocol = 'tcp'
 
-  $version = ''
+  $version = 'latest'
 
   ### General variables that affect module's behaviour
   # They can be set at top scope level or in a ENC
