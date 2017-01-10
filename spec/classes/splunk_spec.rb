@@ -49,6 +49,7 @@ describe 'splunk' do
     let(:params) { {:absent => true, :monitor => true , :firewall => true, :port => '42', 
       :forward_server => '127.0.0.1', :deployment_server => '127.0.0.1', :monitor_path => '/dir/file' } }
 
+    it 'should stop splunk before remove Package[splunk]' do should contain_exec('splunk_stop_before_remove').with_command('/opt/splunkforwarder/bin/splunk stop') end
     it 'should remove Package[splunk]' do should contain_package('splunk').with_ensure('absent') end 
     it 'should stop Service[splunk]' do should contain_service('splunk').with_ensure('stopped') end
     it 'should not enable at boot Service[splunk]' do should contain_service('splunk').with_enable('false') end

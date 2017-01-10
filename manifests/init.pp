@@ -390,6 +390,7 @@ class splunk (
       name     => $splunk::package,
       source   => "${splunk::basedir}/${package_provider}/${package_filename}",
       provider => $package_provider,
+      require  => Exec['splunk_stop_before_remove'],
     }
 
     # This is to clean up the old script for installing the packages.
@@ -398,9 +399,16 @@ class splunk (
     }
   } else {
     package { 'splunk':
-      ensure => $splunk::manage_package,
-      name   => $splunk::package,
+      ensure  => $splunk::manage_package,
+      name    => $splunk::package,
+      require => Exec['splunk_stop_before_remove'],
     }
+  }
+
+  exec { 'splunk_stop_before_remove':
+    command => "${splunk::basedir}/bin/splunk stop",
+    path    => '/usr/bin:/usr/sbin:/bin',
+    onlyif  => ["test ${splunk::manage_package} = absent", "test -f ${splunk::pid_file}"],
   }
 
   service { 'splunk':
