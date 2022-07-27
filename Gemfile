@@ -10,7 +10,7 @@ end
 # See http://bombasticmonkey.com/2011/11/04/test-your-puppet-modules-functions/
 source 'https://rubygems.org'
 
-gem 'puppet',       '= 3.1.1'
+gem 'puppet',       '6.25.1'
 gem 'puppet-lint', :git => 'https://github.com/rodjek/puppet-lint.git'
 gem 'rspec',        '< 3.0.0'
 gem 'rspec-puppet', '>= 2.0.1'
