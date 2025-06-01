@@ -12,7 +12,7 @@ source 'https://rubygems.org'
 
 gem 'puppet',       '6.25.1'
 gem 'puppet-lint', :git => 'https://github.com/rodjek/puppet-lint.git'
-gem 'rspec',        '< 3.0.0'
+gem 'rspec',        '< 3.13.2'
 gem 'rspec-puppet', '>= 2.0.1'
 gem 'rake',         '>= 0.9.2'
 gem 'puppetlabs_spec_helper', '0.3.0'
